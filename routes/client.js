@@ -1,5 +1,5 @@
 const express = require('express');
-const Client = require('../modules/client');
+const Client = require('../models/client');
 const router = express.Router();
 const multer = require('multer');
 let filename = '';
@@ -70,16 +70,23 @@ router.get('/getbyid/:id', (req, res) => {
 }
 )
 //update client
-router.put('/update/:id', (req, res) => {
+router.put('/update/:id', upload.any('image'), (req, res) => {
     let id = req.params.id;
     let newData = req.body;
+
+    if(filename.length>0){
+        newData.image = filename;
+    }
+
     Client.findOneAndUpdate(
         { _id: id },
         newData
     )
         .then(
             (updatedClient) => {
+                filename = '';
                 res.send(updatedClient)
+                
             }
         )
         .catch(

@@ -1,5 +1,5 @@
 const express = require('express');
-const Departement = require('../modules/departement');
+const Departement = require('../models/departement');
 const router = express.Router();
 
 //ajout Departement 
