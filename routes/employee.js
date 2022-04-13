@@ -37,7 +37,46 @@ router.post("/ajout", upload.any("image"), (req, res) => {
 });
 //get Employee
 router.get("/all", (req, res) => {
-  Employee.find()
+  Employee.aggregate(
+
+      [
+
+        // {
+        //   $project:{
+        //     name: 1,
+        //     _id: 0,
+        //     email: 1
+        //   }
+        // }
+
+        {
+          $lookup:{
+            from: 'departements',
+            localField: 'idDep',
+            foreignField: '_id',
+            as: 'departement'
+
+          }
+
+        }
+
+        // ,
+        // {
+        //   $skip: 2
+        // },
+        // {
+        //   $limit: 1
+        // }
+        
+      
+
+
+
+      ]
+
+    )
+
+
     .then((allemployee) => {
       res.send(allemployee);
     })
@@ -57,11 +96,18 @@ router.get("/getbyid/:id", (req, res) => {
     });
 });
 //update Employee
-router.put("/update/:id", (req, res) => {
+
+router.put("/update/:id" , upload.any("image") , (req, res) => {
   let id = req.params.id;
   let newData = req.body;
+
+  if(filename.length > 0){
+    newData.image = filename;
+  }
+
   Employee.findOneAndUpdate({ _id: id }, newData)
     .then((updatedEmployee) => {
+      filename = '';
       res.send(updatedEmployee);
     })
     .catch((err) => {

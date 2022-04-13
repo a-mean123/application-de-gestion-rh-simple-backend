@@ -1,4 +1,5 @@
 const mongoose=require('mongoose');
+let objectId = require('mongodb').ObjectId;
 let Employee = mongoose.model(
     'Employee',
     {
@@ -8,7 +9,7 @@ let Employee = mongoose.model(
         tel:String,
         email:String,
         address:String,
-        idDep:String,
+        idDep:objectId,
     }
 )
 
