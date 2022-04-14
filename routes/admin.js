@@ -4,7 +4,7 @@ const router = express.Router();
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 //registre admin
-router.post('/registre', (req, res) => {
+router.post('/register', (req, res) => {
     let data = req.body;
     let adm = new Admin(data);
     let cle = bcrypt.genSaltSync(10);
@@ -13,12 +13,13 @@ router.post('/registre', (req, res) => {
     adm.save()
         .then(
             (saved) => {
-                res.send(saved)
+                res.status(200).send(saved)
             }
         )
         .catch(
             (err) => {
-                res.send(err)
+                console.log(err);
+                res.status(401).send(err)
             }
         )
 });
@@ -35,7 +36,8 @@ router.post('/login', (req, res) => {
                 } else {
                     let payload = {
                         _id: foundedAdmin._id,
-                        email: foundedAdmin.email
+                        email: foundedAdmin.email,
+                        fullname: foundedAdmin.fullname
                     }
                     let token = jwt.sign(payload, '123456789')
                     res.send({ mytoken: token });

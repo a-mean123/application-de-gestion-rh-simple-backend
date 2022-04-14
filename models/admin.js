@@ -2,10 +2,17 @@ const mongoose=require('mongoose');
 let Admin = mongoose.model(
     'Admin',
     {
-        name:String,
-        lastname:String,
-        email:String,
-        password:String,
+      fullname: {
+          type: String,
+       
+      },
+      email: {
+          type: String,
+          unique: true
+      },
+      password: {
+          type: String,
+      }
     }
 )
 
